@@ -80,63 +80,72 @@ Registers a new user.
 ```bash
 curl -X POST http://127.0.0.1:8000/signup \
   -H "Content-Type: application/json" \
-  -d '{
-    "name": "Jane Doe",
-    "email": "jane@example.com",
-    "password": "securepassword123"
-  }'
+  -d '{"name": "Jane Doe", "email": "jane@example.com", "password": "securepassword123"}'
+```
+**Windows (PowerShell):**
+```powershell
+curl.exe -X POST http://127.0.0.1:8000/signup -H "Content-Type: application/json" -d '{\"name\":\"Jane Doe\",\"email\":\"jane@example.com\",\"password\":\"securepassword123\"}'
 ```
 
 ### 2. User Login (`POST /login`)
-Authenticates credentials and returns a JWT access token.
+Authenticates credentials and returns a JWT access token. Copy the `access_token` value from the response — you'll need it for all protected endpoints.
 ```bash
 curl -X POST http://127.0.0.1:8000/login \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "jane@example.com",
-    "password": "securepassword123"
-  }'
+  -d '{"email": "jane@example.com", "password": "securepassword123"}'
+```
+**Windows (PowerShell):**
+```powershell
+curl.exe -X POST http://127.0.0.1:8000/login -H "Content-Type: application/json" -d '{\"email\":\"jane@example.com\",\"password\":\"securepassword123\"}'
 ```
 
-### 3. Create a Fitness Class (`POST /classes` - Protected)
-Creates a new fitness class. Requires a JWT token.
+### 3. Create a Fitness Class (`POST /classes` — Protected)
+Requires a JWT token. Datetimes must be timezone-aware and in the future.
 ```bash
 curl -X POST http://127.0.0.1:8000/classes \
   -H "Authorization: Bearer <your_access_token>" \
   -H "Content-Type: application/json" \
-  -d '{
-    "name": "Morning Yoga",
-    "datetime": "2026-07-15T08:00:00+05:30",
-    "instructor": "John Smith",
-    "available_slots": 15
-  }'
+  -d '{"name": "Morning Yoga", "datetime": "2026-07-15T08:00:00+05:30", "instructor": "John Smith", "available_slots": 15}'
+```
+**Windows (PowerShell):**
+```powershell
+curl.exe -X POST http://127.0.0.1:8000/classes -H "Authorization: Bearer <your_access_token>" -H "Content-Type: application/json" -d '{\"name\":\"Morning Yoga\",\"datetime\":\"2026-07-15T08:00:00+05:30\",\"instructor\":\"John Smith\",\"available_slots\":15}'
 ```
 
 ### 4. Get Upcoming Classes (`GET /classes`)
-Retrieves all future classes sorted by start time.
+Public endpoint. Returns all future classes sorted by start time.
 ```bash
-curl -X GET http://127.0.0.1:8000/classes
+curl http://127.0.0.1:8000/classes
+```
+**Windows (PowerShell):**
+```powershell
+curl.exe http://127.0.0.1:8000/classes
 ```
 
-### 5. Book a Fitness Class (`POST /book` - Protected)
-Books a slot in a fitness class. Requires a JWT token.
+### 5. Book a Fitness Class (`POST /book` — Protected)
 ```bash
 curl -X POST http://127.0.0.1:8000/book \
   -H "Authorization: Bearer <your_access_token>" \
   -H "Content-Type: application/json" \
-  -d '{
-    "class_id": 1,
-    "client_name": "Jane Doe",
-    "client_email": "jane@example.com"
-  }'
+  -d '{"class_id": 1, "client_name": "Jane Doe", "client_email": "jane@example.com"}'
+```
+**Windows (PowerShell):**
+```powershell
+curl.exe -X POST http://127.0.0.1:8000/book -H "Authorization: Bearer <your_access_token>" -H "Content-Type: application/json" -d '{\"class_id\":1,\"client_name\":\"Jane Doe\",\"client_email\":\"jane@example.com\"}'
 ```
 
-### 6. View User Bookings (`GET /bookings` - Protected)
-Retrieves all bookings for the authenticated user, sorted by class datetime. Requires a JWT token.
+### 6. View My Bookings (`GET /bookings` — Protected)
+Returns all bookings for the authenticated user, sorted by class datetime.
 ```bash
-curl -X GET http://127.0.0.1:8000/bookings \
+curl http://127.0.0.1:8000/bookings \
   -H "Authorization: Bearer <your_access_token>"
 ```
+**Windows (PowerShell):**
+```powershell
+curl.exe http://127.0.0.1:8000/bookings -H "Authorization: Bearer <your_access_token>"
+```
+
+> **Windows note:** PowerShell aliases `curl` to `Invoke-WebRequest`. Use `curl.exe` to invoke the real curl binary. JSON bodies need escaped inner quotes (`\"`).
 
 ## Running Tests
 
