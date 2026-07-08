@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth_router
+from app.routers import auth_router, classes_router
 
 app = FastAPI(
     title="Fitness Studio Booking API",
@@ -17,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(classes_router)
 
 @app.get("/health", tags=["System"])
 async def health_check():
