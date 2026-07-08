@@ -37,6 +37,7 @@ def test_create_class_success():
     assert data["instructor"] == "John Doe"
     assert data["available_slots"] == 15
     assert "id" in data
+    assert "+05:30" in data["datetime"]
 
 def test_create_class_unauthorized():
     future_time = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()

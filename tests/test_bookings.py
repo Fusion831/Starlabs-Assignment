@@ -49,6 +49,8 @@ def test_book_class_success():
     assert data["instructor"] == "John Doe"
     assert data["client_name"] == "Booking User"
     assert data["client_email"] == "booking_user@example.com"
+    assert "+05:30" in data["datetime"]
+    assert "+05:30" in data["booked_at"]
     
     classes_resp = client.get("/classes")
     classes_data = classes_resp.json()

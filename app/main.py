@@ -1,6 +1,16 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.database import Base, engine
+from app.models import user, fitness_class, booking  # noqa: F401 – registers models with Base
 from app.routers import auth_router, classes_router, bookings_router
+
+Base.metadata.create_all(bind=engine)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 
 app = FastAPI(
     title="Fitness Studio Booking API",
