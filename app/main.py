@@ -7,7 +7,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Configure CORS Middleware (permissive for local development and testing)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
