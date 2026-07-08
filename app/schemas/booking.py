@@ -1,5 +1,7 @@
-from datetime import datetime as dt
-from pydantic import BaseModel, EmailStr, Field, model_validator
+from datetime import datetime as dt, timezone, timedelta
+from pydantic import BaseModel, EmailStr, Field, model_validator, field_validator
+
+ist_tz = timezone(timedelta(hours=5, minutes=30))
 
 class BookingCreate(BaseModel):
     class_id: int = Field(..., description="The ID of the fitness class to book.")
@@ -20,6 +22,13 @@ class BookingResponse(BaseModel):
         "from_attributes": True
     }
 
+    @field_validator("datetime", "booked_at", mode="after")
+    @classmethod
+    def convert_to_ist(cls, v: dt) -> dt:
+        if v.tzinfo is None:
+            v = v.replace(tzinfo=timezone.utc)
+        return v.astimezone(ist_tz)
+
     @model_validator(mode="before")
     @classmethod
     def resolve_fitness_class_fields(cls, data):
@@ -39,7 +48,6 @@ class BookingResponse(BaseModel):
                     data["instructor"] = getattr(fitness_class, "instructor", None)
             return data
 
-        
         fitness_class = getattr(data, "fitness_class", None)
         if fitness_class:
             return {
