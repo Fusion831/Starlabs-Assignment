@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from app.database import Base
 
+#Bidirectional mapping is causing circular imports, so this helps prevent errors during runtime checks/debug
 if TYPE_CHECKING:
     from app.models.user import User
     from app.models.fitness_class import FitnessClass
